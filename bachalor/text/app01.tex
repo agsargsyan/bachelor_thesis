@@ -1,12 +1,33 @@
 %% Приложение
 
-\chapter{Название первого приложения}
+\chapter{Имитационная модель}
 \label{app1}
 
-\section{Название секции}
+\section{main.tcl}
 \label{app1:sec1}
-
-Текст.
+\begin{verbatim}
+#новый экземпляр объекта Symulator
+set ns [new Simulator]
+#трейс файл для nam
+set nf [open output/out.nam w]
+$ns namtrace-all $nf
+#количество источников 
+set N 20
+#создание узлов и соединений
+source "nodes.tcl"
+#метрики TCP
+source "TCP.tcl"
+#настройка очереди		
+source "queue.tcl"
+#настройка времени моделирования  		
+source "timing.tcl" 		
+#визуализация в nam
+source "nam.tcl"   		
+#процедура finish
+source "finish.tcl"                                                                         
+#запуск программы
+$ns run
+\end{verbatim}
 
 \section{Название секции}
 \label{app1:sec2}
