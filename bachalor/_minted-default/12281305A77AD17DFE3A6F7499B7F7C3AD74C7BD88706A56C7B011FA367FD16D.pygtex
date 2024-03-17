@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} новый экземпляр объекта Symulator}
+\PYG{n+nb}{set} ns \PYG{o}{[}new Simulator\PYG{o}{]}
+\PYG{c+c1}{\PYGZsh{} трейс файл для nam}
+\PYG{n+nb}{set} nf \PYG{o}{[}open output/out.nam w\PYG{o}{]}
+\PYG{n+nv}{\PYGZdl{}ns} namtrace\PYGZhy{}all \PYG{n+nv}{\PYGZdl{}nf}
+\PYG{c+c1}{\PYGZsh{} количество источников}
+\PYG{n+nb}{set} N \PYG{l+m}{20}
+\PYG{c+c1}{\PYGZsh{} создание узлов и соединений}
+\PYG{n+nb}{source} \PYG{l+s+s2}{\PYGZdq{}nodes.tcl\PYGZdq{}}
+\PYG{c+c1}{\PYGZsh{} метрики TCP}
+\PYG{n+nb}{source} \PYG{l+s+s2}{\PYGZdq{}TCP.tcl\PYGZdq{}}
+\PYG{c+c1}{\PYGZsh{} настройка очереди		}
+\PYG{n+nb}{source} \PYG{l+s+s2}{\PYGZdq{}queue.tcl\PYGZdq{}}
+\PYG{c+c1}{\PYGZsh{} настройка времени моделирования  		}
+\PYG{n+nb}{source} \PYG{l+s+s2}{\PYGZdq{}timing.tcl\PYGZdq{}} 		
+\PYG{c+c1}{\PYGZsh{} визуализация в nam}
+\PYG{n+nb}{source} \PYG{l+s+s2}{\PYGZdq{}nam.tcl\PYGZdq{}}   		
+\PYG{c+c1}{\PYGZsh{} процедура finish}
+\PYG{n+nb}{source} \PYG{l+s+s2}{\PYGZdq{}finish.tcl\PYGZdq{}}
+\PYG{c+c1}{\PYGZsh{}запуск программы}
+\PYG{n+nv}{\PYGZdl{}ns} run
+\end{Verbatim}

@@ -1,0 +1,25 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{} Мониторинг метрик TCP}
+
+\PYG{c+c1}{\PYGZsh{}размер окна TCP для всех источников}
+\PYG{n+nb}{set} windowVsTime \PYG{o}{[}open output/WvsT w\PYG{o}{]}
+
+\PYG{c+c1}{\PYGZsh{}размер окна TCP для 1 источника}
+\PYG{n+nb}{set} windowVsTime\PYGZus{}1 \PYG{o}{[}open output/WvsT\PYGZus{}1 w\PYG{o}{]}
+
+\PYG{c+c1}{\PYGZsh{}время приема\PYGZhy{}передачи}
+\PYG{n+nb}{set} rtt \PYG{o}{[}open output/RTT w\PYG{o}{]}
+
+\PYG{c+c1}{\PYGZsh{}отклонение времени приема\PYGZhy{}передачи}
+\PYG{n+nb}{set} rttvar \PYG{o}{[}open output/RTTVAR w\PYG{o}{]}
+
+\PYG{c+c1}{\PYGZsh{} Функция для получение данных о метриках}
+proc plotMetric \PYG{o}{\PYGZob{}}tcpSource file metric\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}
+    global ns
+    \PYG{n+nb}{set} \PYG{n+nb}{time} \PYG{l+m}{0}.01
+    \PYG{n+nb}{set} now \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} now\PYG{o}{]}
+    \PYG{n+nb}{set} value \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}tcpSource} \PYG{n+nb}{set} \PYG{n+nv}{\PYGZdl{}metric}\PYG{o}{]}
+    puts \PYG{n+nv}{\PYGZdl{}file} \PYG{l+s+s2}{\PYGZdq{}}\PYG{n+nv}{\PYGZdl{}now}\PYG{l+s+s2}{ }\PYG{n+nv}{\PYGZdl{}value}\PYG{l+s+s2}{\PYGZdq{}}
+    \PYG{n+nv}{\PYGZdl{}ns} at \PYG{o}{[}expr \PYG{n+nv}{\PYGZdl{}now}+\PYG{n+nv}{\PYGZdl{}time}\PYG{o}{]} \PYG{l+s+s2}{\PYGZdq{}plotMetric }\PYG{n+nv}{\PYGZdl{}tcpSource}\PYG{l+s+s2}{ }\PYG{n+nv}{\PYGZdl{}file}\PYG{l+s+s2}{ }\PYG{n+nv}{\PYGZdl{}metric}\PYG{l+s+s2}{\PYGZdq{}}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

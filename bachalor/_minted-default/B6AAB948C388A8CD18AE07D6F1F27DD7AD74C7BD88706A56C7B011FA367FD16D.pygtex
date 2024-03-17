@@ -1,0 +1,24 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}визуализация цветов, формы, располажения узлов в nam}
+\PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} color \PYG{l+s+s2}{\PYGZdq{}red\PYGZdq{}}
+\PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} color \PYG{l+s+s2}{\PYGZdq{}red\PYGZdq{}}
+\PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} label \PYG{l+s+s2}{\PYGZdq{}RED\PYGZdq{}}
+\PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} shape \PYG{l+s+s2}{\PYGZdq{}square\PYGZdq{}}
+\PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} label \PYG{l+s+s2}{\PYGZdq{}square\PYGZdq{}}
+
+\PYG{n+nv}{\PYGZdl{}ns} simplex\PYGZhy{}link\PYGZhy{}op \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} orient right
+\PYG{n+nv}{\PYGZdl{}ns} simplex\PYGZhy{}link\PYGZhy{}op \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} orient left
+\PYG{n+nv}{\PYGZdl{}ns} simplex\PYGZhy{}link\PYGZhy{}op \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} queuePos \PYG{l+m}{0}
+\PYG{n+nv}{\PYGZdl{}ns} simplex\PYGZhy{}link\PYGZhy{}op \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} queuePos \PYG{l+m}{0}
+
+\PYG{k}{for} \PYG{o}{\PYGZob{}}\PYG{n+nb}{set} m \PYG{l+m}{0}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}\PYG{n+nv}{\PYGZdl{}m} \PYGZlt{} \PYG{n+nv}{\PYGZdl{}N}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}incr m\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}
+	\PYG{n+nv}{\PYGZdl{}ns} duplex\PYGZhy{}link\PYGZhy{}op \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{n+nv}{\PYGZdl{}m}\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} orient right
+	\PYG{n+nv}{\PYGZdl{}ns} duplex\PYGZhy{}link\PYGZhy{}op \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{o}{[}expr \PYG{n+nv}{\PYGZdl{}N} + \PYG{n+nv}{\PYGZdl{}m}\PYG{o}{])} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} orient left
+\PYG{o}{\PYGZcb{}}
+
+\PYG{k}{for} \PYG{o}{\PYGZob{}}\PYG{n+nb}{set} i \PYG{l+m}{0}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}\PYG{n+nv}{\PYGZdl{}i} \PYGZlt{} \PYG{n+nv}{\PYGZdl{}N}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}incr i\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}
+	\PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{n+nv}{\PYGZdl{}i}\PYG{o}{)} color \PYG{l+s+s2}{\PYGZdq{}blue\PYGZdq{}}
+	\PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{n+nv}{\PYGZdl{}i}\PYG{o}{)} label \PYG{l+s+s2}{\PYGZdq{}ftp\PYGZdq{}}
+
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

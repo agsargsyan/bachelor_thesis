@@ -1,0 +1,30 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}маршрутизаторы}
+\PYG{n+nb}{set} node\PYGZus{}\PYG{o}{(}r0\PYG{o}{)} \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} node\PYG{o}{]}
+\PYG{n+nb}{set} node\PYGZus{}\PYG{o}{(}r1\PYG{o}{)} \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} node\PYG{o}{]}
+
+\PYG{c+c1}{\PYGZsh{}источники и приемники}
+\PYG{k}{for} \PYG{o}{\PYGZob{}}\PYG{n+nb}{set} i \PYG{l+m}{0}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}\PYG{n+nv}{\PYGZdl{}i} \PYGZlt{} \PYG{n+nv}{\PYGZdl{}N}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}incr i\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}
+	\PYG{n+nb}{set} node\PYGZus{}\PYG{o}{(}s\PYG{n+nv}{\PYGZdl{}i}\PYG{o}{)} \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} node\PYG{o}{]} 		
+	\PYG{n+nb}{set} node\PYGZus{}\PYG{o}{(}s\PYG{o}{[}expr \PYG{n+nv}{\PYGZdl{}N} + \PYG{n+nv}{\PYGZdl{}i}\PYG{o}{])} \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} node\PYG{o}{]}	
+	\PYG{o}{\PYGZcb{}}
+
+\PYG{c+c1}{\PYGZsh{}связи между маршрутизаторами и другими узлами(размер буфера, время, тип очереди)}
+\PYG{k}{for} \PYG{o}{\PYGZob{}}\PYG{n+nb}{set} i \PYG{l+m}{0}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}\PYG{n+nv}{\PYGZdl{}i} \PYGZlt{} \PYG{n+nv}{\PYGZdl{}N}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}incr i\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}
+	\PYG{n+nv}{\PYGZdl{}ns} duplex\PYGZhy{}link \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{n+nv}{\PYGZdl{}i}\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} 100Mb 20ms DropTail
+	\PYG{n+nv}{\PYGZdl{}ns} duplex\PYGZhy{}link \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{o}{[}expr \PYG{n+nv}{\PYGZdl{}N} + \PYG{n+nv}{\PYGZdl{}i}\PYG{o}{])} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} 100Mb 20ms DropTail
+\PYG{o}{\PYGZcb{}}
+
+\PYG{c+c1}{\PYGZsh{}связи между маршрутизаторами(размер буфера, время, тип очереди)}
+\PYG{n+nv}{\PYGZdl{}ns} simplex\PYGZhy{}link \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} 20Mb 15ms RED
+\PYG{n+nv}{\PYGZdl{}ns} simplex\PYGZhy{}link \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} 15Mb 20ms DropTail
+
+\PYG{c+c1}{\PYGZsh{} Агенты и приложения}
+\PYG{k}{for} \PYG{o}{\PYGZob{}}\PYG{n+nb}{set} t \PYG{l+m}{0}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}\PYG{n+nv}{\PYGZdl{}t} \PYGZlt{} \PYG{n+nv}{\PYGZdl{}N}\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}incr t\PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}
+	\PYG{n+nv}{\PYGZdl{}ns} color \PYG{n+nv}{\PYGZdl{}t} green
+	\PYG{n+nb}{set} tcp\PYG{o}{(}\PYG{n+nv}{\PYGZdl{}t}\PYG{o}{)} \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} create\PYGZhy{}connection TCP/Reno \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{n+nv}{\PYGZdl{}t}\PYG{o}{)} TCPSink \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}s\PYG{o}{[}expr \PYG{n+nv}{\PYGZdl{}N} + \PYG{n+nv}{\PYGZdl{}t}\PYG{o}{])} \PYG{n+nv}{\PYGZdl{}t}\PYG{o}{]}
+	\PYG{n+nv}{\PYGZdl{}tcp}\PYG{o}{(}\PYG{n+nv}{\PYGZdl{}t}\PYG{o}{)} \PYG{n+nb}{set} window\PYGZus{} \PYG{l+m}{32}
+	\PYG{n+nv}{\PYGZdl{}tcp}\PYG{o}{(}\PYG{n+nv}{\PYGZdl{}t}\PYG{o}{)} \PYG{n+nb}{set} maxcwnd\PYGZus{} \PYG{l+m}{32}
+	\PYG{n+nb}{set} ftp\PYG{o}{(}\PYG{n+nv}{\PYGZdl{}t}\PYG{o}{)} \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}tcp}\PYG{o}{(}\PYG{n+nv}{\PYGZdl{}t}\PYG{o}{)} attach\PYGZhy{}source FTP\PYG{o}{]}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -1,0 +1,42 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}Лимит очереди}
+\PYG{n+nv}{\PYGZdl{}ns} queue\PYGZhy{}limit \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} \PYG{l+m}{300}
+\PYG{n+nv}{\PYGZdl{}ns} queue\PYGZhy{}limit \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{l+m}{300}
+
+\PYG{c+c1}{\PYGZsh{}настройка параметров RED}
+\PYG{n+nb}{set} redq \PYG{o}{[[}\PYG{n+nv}{\PYGZdl{}ns} link \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)]} queue\PYG{o}{]}
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} thresh\PYGZus{} \PYG{l+m}{75}
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} maxthresh\PYGZus{} \PYG{l+m}{150}
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} q\PYGZus{}weight\PYGZus{} \PYG{l+m}{0}.002
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} linterm\PYGZus{} \PYG{l+m}{10}
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} drop\PYGZhy{}tail\PYGZus{} \PYG{n+nb}{true}
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} gentle\PYGZus{} \PYG{n+nb}{false}
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} queue\PYGZhy{}in\PYGZhy{}bytes \PYG{n+nb}{false}
+
+\PYG{c+c1}{\PYGZsh{}мониторинг параметров длины очереди:}
+\PYG{n+nb}{set} tchan\PYGZus{} \PYG{o}{[}open output/all.q w\PYG{o}{]}
+\PYG{n+nv}{\PYGZdl{}redq} trace curq\PYGZus{}
+\PYG{n+nv}{\PYGZdl{}redq} trace ave\PYGZus{}
+\PYG{n+nv}{\PYGZdl{}redq} attach \PYG{n+nv}{\PYGZdl{}tchan\PYGZus{}}
+
+\PYG{c+c1}{\PYGZsh{}монитринг соеденения между маршрутизаторами}
+\PYG{n+nb}{set} qmon \PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} monitor\PYGZhy{}queue \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)} \PYG{o}{[}open output/qm.out w\PYG{o}{]]}
+\PYG{o}{[}\PYG{n+nv}{\PYGZdl{}ns} link \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r0\PYG{o}{)} \PYG{n+nv}{\PYGZdl{}node\PYGZus{}}\PYG{o}{(}r1\PYG{o}{)]} queue\PYGZhy{}sample\PYGZhy{}timeout
+
+\PYG{c+c1}{\PYGZsh{}Для реализации разных модификаций RED, реализовано благодаря изменению исходного кода программы}
+
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set nonlinear\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set hyperbola\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set quadratic\PYGZus{}linear\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set three\PYGZus{}sections\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set exponential\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set smart\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set double\PYGZus{}slope\PYGZus{} 1}
+
+\PYG{c+c1}{\PYGZsh{}Группа адаптивных алгоритмов}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set adaptive\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set feng\PYGZus{}adaptive\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set refined\PYGZus{}adaptive\PYGZus{} 1}
+\PYG{c+c1}{\PYGZsh{}\PYGZdl{}redq set fast\PYGZus{}adaptive\PYGZus{} 1}
+\PYG{n+nv}{\PYGZdl{}redq} \PYG{n+nb}{set} powared\PYGZus{} \PYG{l+m}{1}
+\end{Verbatim}

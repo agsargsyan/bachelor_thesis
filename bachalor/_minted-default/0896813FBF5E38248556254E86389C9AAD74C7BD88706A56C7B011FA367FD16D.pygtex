@@ -1,0 +1,44 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{c+c1}{\PYGZsh{}Finish procedure}
+proc finish \PYG{o}{\PYGZob{}\PYGZcb{}} \PYG{o}{\PYGZob{}}
+   global ns nf
+   \PYG{n+nv}{\PYGZdl{}ns} flush\PYGZhy{}trace
+   close \PYG{n+nv}{\PYGZdl{}nf}
+   global tchan\PYGZus{}
+   \PYG{c+c1}{\PYGZsh{}разделение данных мгновееной очереди и средней очереди}
+   \PYG{n+nb}{set} awkCode \PYG{o}{\PYGZob{}}
+      \PYG{o}{\PYGZob{}}
+	 \PYG{k}{if} \PYG{o}{(}\PYG{n+nv}{\PYGZdl{}1} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}Q\PYGZdq{}} \PYG{o}{\PYGZam{}\PYGZam{}} NF\PYGZgt{}2\PYG{o}{)} \PYG{o}{\PYGZob{}}
+	    print \PYG{n+nv}{\PYGZdl{}2}, \PYG{n+nv}{\PYGZdl{}3} \PYGZgt{}\PYGZgt{} \PYG{l+s+s2}{\PYGZdq{}output/temp.q\PYGZdq{}}\PYG{p}{;}
+	    \PYG{n+nb}{set} end \PYG{n+nv}{\PYGZdl{}2}
+	 \PYG{o}{\PYGZcb{}}
+	 \PYG{k}{else} \PYG{k}{if} \PYG{o}{(}\PYG{n+nv}{\PYGZdl{}1} \PYG{o}{==} \PYG{l+s+s2}{\PYGZdq{}a\PYGZdq{}} \PYG{o}{\PYGZam{}\PYGZam{}} NF\PYGZgt{}2\PYG{o}{)}
+	 print \PYG{n+nv}{\PYGZdl{}2}, \PYG{n+nv}{\PYGZdl{}3} \PYGZgt{}\PYGZgt{} \PYG{l+s+s2}{\PYGZdq{}output/temp.a\PYGZdq{}}\PYG{p}{;}
+      \PYG{o}{\PYGZcb{}}
+   \PYG{o}{\PYGZcb{}}
+   \PYG{n+nb}{set} f \PYG{o}{[}open output/temp.queue w\PYG{o}{]}
+   puts \PYG{n+nv}{\PYGZdl{}f} \PYG{l+s+s2}{\PYGZdq{}TitleText: RED\PYGZdq{}}
+   puts \PYG{n+nv}{\PYGZdl{}f} \PYG{l+s+s2}{\PYGZdq{}Device: Postscript\PYGZdq{}}
+
+   \PYG{k}{if} \PYG{o}{\PYGZob{}} \PYG{o}{[}info exists tchan\PYGZus{}\PYG{o}{]} \PYG{o}{\PYGZcb{}} \PYG{o}{\PYGZob{}}
+      close \PYG{n+nv}{\PYGZdl{}tchan\PYGZus{}}
+   \PYG{o}{\PYGZcb{}}
+   \PYG{n+nb}{exec} rm \PYGZhy{}f output/temp.q output/temp.a
+   \PYG{n+nb}{exec} touch output/temp.a output/temp.q
+   \PYG{n+nb}{exec} awk \PYG{n+nv}{\PYGZdl{}awkCode} output/all.q
+
+   puts \PYG{n+nv}{\PYGZdl{}f} \PYG{l+s+se}{\PYGZbs{}\PYGZdq{}}queue
+   \PYG{n+nb}{exec} cat output/temp.q \PYGZgt{}@ \PYG{n+nv}{\PYGZdl{}f}
+   puts \PYG{n+nv}{\PYGZdl{}f} \PYG{l+s+se}{\PYGZbs{}n\PYGZbs{}\PYGZdq{}}ave\PYGZus{}queue
+   \PYG{n+nb}{exec} cat output/temp.a \PYGZgt{}@ \PYG{n+nv}{\PYGZdl{}f}
+   close \PYG{n+nv}{\PYGZdl{}f}
+   \PYG{c+c1}{\PYGZsh{} вывод графиков в xgraph для быстрого просмотра}
+   \PYG{n+nb}{exec} xgraph \PYGZhy{}bb \PYGZhy{}tk \PYGZhy{}x \PYG{n+nb}{time} \PYGZhy{}t \PYG{l+s+s2}{\PYGZdq{}TCPRenoCWND\PYGZdq{}} output/WvsT \PYG{p}{\PYGZam{}}
+   \PYG{n+nb}{exec} xgraph \PYGZhy{}bb \PYGZhy{}tk \PYGZhy{}x \PYG{n+nb}{time} \PYGZhy{}t \PYG{l+s+s2}{\PYGZdq{}TCPRenoCWND\PYGZus{}1\PYGZdq{}} output/WvsT\PYGZus{}1 \PYG{p}{\PYGZam{}}
+   \PYG{n+nb}{exec} xgraph \PYGZhy{}bb \PYGZhy{}tk \PYGZhy{}x \PYG{n+nb}{time} \PYGZhy{}t \PYG{l+s+s2}{\PYGZdq{}RTT\PYGZdq{}} output/RTT \PYG{p}{\PYGZam{}}
+   \PYG{n+nb}{exec} xgraph \PYGZhy{}bb \PYGZhy{}tk \PYGZhy{}x \PYG{n+nb}{time} \PYGZhy{}t \PYG{l+s+s2}{\PYGZdq{}RTTVAR\PYGZdq{}} output/RTTVAR \PYG{p}{\PYGZam{}}
+   \PYG{n+nb}{exec} xgraph \PYGZhy{}bb \PYGZhy{}tk \PYGZhy{}x \PYG{n+nb}{time} \PYGZhy{}y queue output/temp.queue \PYG{p}{\PYGZam{}}
+   \PYG{c+c1}{\PYGZsh{}exec nam output/out.nam \PYGZam{}}
+   \PYG{n+nb}{exit} \PYG{l+m}{0}
+\PYG{o}{\PYGZcb{}}
+\end{Verbatim}

@@ -5,33 +5,35 @@
 
 \section*{main.tcl}
 \label{app1:sec1}
-\begin{verbatim}
-#новый экземпляр объекта Symulator
+
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
+# новый экземпляр объекта Symulator
 set ns [new Simulator]
-#трейс файл для nam
+# трейс файл для nam
 set nf [open output/out.nam w]
 $ns namtrace-all $nf
-#количество источников 
+# количество источников 
 set N 20
-#создание узлов и соединений
+# создание узлов и соединений
 source "nodes.tcl"
-#метрики TCP
+# метрики TCP
 source "TCP.tcl"
-#настройка очереди		
+# настройка очереди		
 source "queue.tcl"
-#настройка времени моделирования  		
+# настройка времени моделирования  		
 source "timing.tcl" 		
-#визуализация в nam
+# визуализация в nam
 source "nam.tcl"   		
-#процедура finish
+# процедура finish
 source "finish.tcl"                                                                         
 #запуск программы
 $ns run
-\end{verbatim}
+\end{minted}
+
 
 \section*{nodes.tcl}
 \label{app1:sec2}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
 #маршрутизаторы
 set node_(r0) [$ns node]  
 set node_(r1) [$ns node]  
@@ -60,11 +62,11 @@ for {set t 0} {$t < $N} {incr t} {
 	$tcp($t) set maxcwnd_ 32
 	set ftp($t) [$tcp($t) attach-source FTP]
 }
-\end{verbatim}
+\end{minted}
 
 \section*{TCP.tcl}
 \label{app1:sec3}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
 # Мониторинг метрик TCP
 
 #размер окна TCP для всех источников
@@ -88,11 +90,11 @@ proc plotMetric {tcpSource file metric} {
     puts $file "$now $value"
     $ns at [expr $now+$time] "plotMetric $tcpSource $file $metric"
 }
-\end{verbatim}
+\end{minted}
 
 \section*{queue.tcl}
 \label{app1:sec4}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
 #Лимит очереди
 $ns queue-limit $node_(r0) $node_(r1) 300
 $ns queue-limit $node_(r1) $node_(r0) 300
@@ -133,11 +135,11 @@ set qmon [$ns monitor-queue $node_(r0) $node_(r1) [open output/qm.out w]]
 #$redq set refined_adaptive_ 1
 #$redq set fast_adaptive_ 1
 $redq set powared_ 1
-\end{verbatim}
+\end{minted}
 
 \section*{timing.tcl}
 \label{app1:sec5}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
 for {set r 0} {$r < $N} {incr r} {
 	$ns at 0.0 "$ftp($r) start"
 	$ns at 100.0 "$ftp($r) stop"
@@ -147,11 +149,11 @@ $ns at 1.0 "plotMetric $tcp(1) $windowVsTime_1 cwnd_"
 $ns at 1.0 "plotMetric $tcp(1) $rtt rtt_"
 $ns at 1.0 "plotMetric $tcp(1) $rttvar rttvar_"
 $ns at 100.0 "finish"
-\end{verbatim}
+\end{minted}
 
 \section*{nam.tcl}
 \label{app1:sec6}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
 #визуализация цветов, формы, располажения узлов в nam
 $node_(r0) color "red"
 $node_(r1) color "red"
@@ -174,11 +176,11 @@ for {set i 0} {$i < $N} {incr i} {
 	$node_(s$i) label "ftp"
 
 }
-\end{verbatim}
+\end{minted}
 
 \section*{finish.tcl}
 \label{app1:sec7}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{bash}
 #Finish procedure
 proc finish {} {
    global ns nf
@@ -221,7 +223,7 @@ proc finish {} {
    #exec nam output/out.nam &
    exit 0
 }
-\end{verbatim}
+\end{minted}
 
 %%% Local Variables:
 %%% mode: latex

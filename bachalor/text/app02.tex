@@ -5,7 +5,7 @@
 
 \section{Обновленная вероятностей функции RED в NS-2}
 \label{app2:sec1}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{C++}
 double
 REDQueue::calculate_p_new(double v_ave, double th_max, int gentle, double v_a, 
 	double v_b, double v_c, double v_d, double max_p)
@@ -15,13 +15,8 @@ REDQueue::calculate_p_new(double v_ave, double th_max, int gentle, double v_a,
 	double th_min = edp_.th_min;
 	double p;
 	if (gentle && v_ave >= th_max) {
-		// p ranges from max_p to 1 as the average queue
-		// size ranges from th_max to twice th_max 
 		p = v_c * v_ave + v_d;
         } else if (!gentle && v_ave >= th_max) { 
-                // OLD: p continues to range linearly above max_p as
-                // the average queue size ranges above th_max.
-                // NEW: p is set to 1.0 
                 p = 1.0;
         } else if (edp_.quadratic_linear == 1) {
         	target = 2 * ((th_min + th_max)/3) - th_min;
@@ -88,9 +83,10 @@ REDQueue::calculate_p_new(double v_ave, double th_max, int gentle, double v_a,
 		p = 1.0;
 	return p;
 }
-\end{verbatim}
+\end{minted}
+
 \section{Функции для адаптивных RED}
-\begin{verbatim}
+\begin{minted}[linenos,tabsize=2,breaklines]{C++}
 void REDQueue::updateMaxP_refined_adaptive(double new_ave, double now)
 {
   	double part = 0.48*(edp_.th_max - edp_.th_min);
@@ -114,9 +110,6 @@ void REDQueue::updateMaxP_powared(double new_ave, double now)
   	int b = edp_.pwb;
   	int r = edp_.bf_size;
   	double v_ave = edv_.v_ave;
-  	
-  	
-  	
   	double delta1 = abs(pow((v_ave - target)/(b * target), k));
   	double delta2 = abs(pow((target - v_ave)/(b * (r -target)), k));
  	
@@ -145,7 +138,8 @@ void REDQueue::updateMaxP_fast_adaptive(double new_ave, double now){
  		double maxp = edv_.cur_max_p;
  	}
 }
-\end{verbatim}
+\end{minted}
+
 
 %%% Local Variables:
 %%% mode: latex
