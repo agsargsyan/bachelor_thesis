@@ -1,0 +1,30 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{mininet.topo} \PYG{k+kn}{import} \PYG{n}{Topo}
+\PYG{k+kn}{from} \PYG{n+nn}{router} \PYG{k+kn}{import} \PYG{n}{LinuxRouter}
+
+\PYG{c+c1}{\PYGZsh{} создание топологии для сети}
+\PYG{k}{class} \PYG{n+nc}{NetworkTopo}\PYG{p}{(}\PYG{n}{Topo}\PYG{p}{):}
+    \PYG{k}{def} \PYG{n+nf}{build}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{num\PYGZus{}hosts\PYGZus{}subnets}\PYG{p}{,} \PYG{o}{**}\PYG{n}{\PYGZus{}opts}\PYG{p}{):}
+        \PYG{c+c1}{\PYGZsh{} создание маршрутизаторы}
+        \PYG{n}{r0} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addHost}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}r0\PYGZsq{}}\PYG{p}{,} \PYG{n+nb+bp}{cls}\PYG{o}{=}\PYG{n}{LinuxRouter}\PYG{p}{,} \PYG{n}{ip}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}10.0.0.1/24\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{r1} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addHost}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}r1\PYGZsq{}}\PYG{p}{,} \PYG{n+nb+bp}{cls}\PYG{o}{=}\PYG{n}{LinuxRouter}\PYG{p}{,} \PYG{n}{ip}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}10.1.0.1/24\PYGZsq{}}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} добавление коммутаторов для связи хостов}
+        \PYG{n}{s1} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addSwitch}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}s1\PYGZsq{}}\PYG{p}{)}
+        \PYG{n}{s2} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addSwitch}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}s2\PYGZsq{}}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} соединение между маршрутизаторами и коммутаторами}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addLink}\PYG{p}{(}\PYG{n}{s1}\PYG{p}{,} \PYG{n}{r0}\PYG{p}{,} \PYG{n}{intfName2}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r0\PYGZhy{}eth1\PYGZsq{}}\PYG{p}{,} \PYG{n}{params2}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}ip\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}10.0.0.1/24\PYGZsq{}}\PYG{p}{\PYGZcb{},} \PYG{n}{max\PYGZus{}queue\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{300}\PYG{p}{)}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addLink}\PYG{p}{(}\PYG{n}{s2}\PYG{p}{,} \PYG{n}{r1}\PYG{p}{,} \PYG{n}{intfName2}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r1\PYGZhy{}eth1\PYGZsq{}}\PYG{p}{,} \PYG{n}{params2}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}ip\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}10.1.0.1/24\PYGZsq{}}\PYG{p}{\PYGZcb{},} \PYG{n}{max\PYGZus{}queue\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{300}\PYG{p}{)}
+
+        \PYG{c+c1}{\PYGZsh{} соединение между маршрутизаторами}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addLink}\PYG{p}{(}\PYG{n}{r0}\PYG{p}{,} \PYG{n}{r1}\PYG{p}{,} \PYG{n}{intfName1}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r0\PYGZhy{}eth2\PYGZsq{}}\PYG{p}{,} \PYG{n}{intfName2}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}r1\PYGZhy{}eth2\PYGZsq{}}\PYG{p}{,} \PYG{n}{max\PYGZus{}queue\PYGZus{}size}\PYG{o}{=}\PYG{l+m+mi}{30000}\PYG{p}{,} \PYG{n}{params1}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}ip\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}10.100.0.1/24\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}bw\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}20\PYGZsq{}}\PYG{p}{\PYGZcb{},} \PYG{n}{params2}\PYG{o}{=}\PYG{p}{\PYGZob{}}\PYG{l+s+s1}{\PYGZsq{}ip\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}10.100.0.2/24\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}bw\PYGZsq{}}\PYG{p}{:} \PYG{l+s+s1}{\PYGZsq{}15\PYGZsq{}}\PYG{p}{\PYGZcb{})}
+
+        \PYG{c+c1}{\PYGZsh{} добавление оконечных устройств}
+        \PYG{k}{for} \PYG{n}{i} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{l+m+mi}{2}\PYG{o}{*}\PYG{n}{num\PYGZus{}hosts\PYGZus{}subnets} \PYG{o}{+} \PYG{l+m+mi}{1}\PYG{p}{):}
+            \PYG{n}{host\PYGZus{}ip} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}10.0.0.}\PYG{l+s+si}{\PYGZob{}\PYGZcb{}}\PYG{l+s+s1}{/24\PYGZsq{}} \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{2} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}10.1.0.}\PYG{l+s+si}{\PYGZob{}\PYGZcb{}}\PYG{l+s+s1}{/24\PYGZsq{}}
+            \PYG{n}{default\PYGZus{}route} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}via 10.0.0.1\PYGZsq{}} \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{2} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{k}{else} \PYG{l+s+s1}{\PYGZsq{}via 10.1.0.1\PYGZsq{}}
+            \PYG{n}{host} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addHost}\PYG{p}{(}\PYG{n}{name}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}h}\PYG{l+s+si}{\PYGZob{}\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{n}{i}\PYG{p}{),} \PYG{n}{ip}\PYG{o}{=}\PYG{n}{host\PYGZus{}ip}\PYG{o}{.}\PYG{n}{format}\PYG{p}{(}\PYG{l+m+mi}{250} \PYG{o}{\PYGZhy{}} \PYG{n}{i}\PYG{p}{),} \PYG{n}{defaultRoute}\PYG{o}{=}\PYG{n}{default\PYGZus{}route}\PYG{p}{)}
+            \PYG{n}{switch} \PYG{o}{=} \PYG{n}{s1} \PYG{k}{if} \PYG{n}{i} \PYG{o}{\PYGZpc{}} \PYG{l+m+mi}{2} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{k}{else} \PYG{n}{s2}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{addLink}\PYG{p}{(}\PYG{n}{host}\PYG{p}{,} \PYG{n}{switch}\PYG{p}{,} \PYG{n}{bw}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}100m\PYGZsq{}}\PYG{p}{)}
+\end{Verbatim}

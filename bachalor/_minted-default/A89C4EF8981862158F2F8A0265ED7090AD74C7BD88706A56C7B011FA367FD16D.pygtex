@@ -1,15 +1,11 @@
 \begin{Verbatim}[commandchars=\\\{\}]
 \PYG{c+c1}{\PYGZsh{} Мониторинг метрик TCP}
-
 \PYG{c+c1}{\PYGZsh{}размер окна TCP для всех источников}
 \PYG{n+nb}{set} windowVsTime \PYG{o}{[}open output/WvsT w\PYG{o}{]}
-
 \PYG{c+c1}{\PYGZsh{}размер окна TCP для 1 источника}
 \PYG{n+nb}{set} windowVsTime\PYGZus{}1 \PYG{o}{[}open output/WvsT\PYGZus{}1 w\PYG{o}{]}
-
 \PYG{c+c1}{\PYGZsh{}время приема\PYGZhy{}передачи}
 \PYG{n+nb}{set} rtt \PYG{o}{[}open output/RTT w\PYG{o}{]}
-
 \PYG{c+c1}{\PYGZsh{}отклонение времени приема\PYGZhy{}передачи}
 \PYG{n+nb}{set} rttvar \PYG{o}{[}open output/RTTVAR w\PYG{o}{]}
 

@@ -1,0 +1,27 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{threading} \PYG{k+kn}{import} \PYG{n}{Thread}
+\PYG{k+kn}{import} \PYG{n+nn}{threading}
+\PYG{k+kn}{import} \PYG{n+nn}{time}
+
+\PYG{n}{iperf\PYGZus{}time} \PYG{o}{=} \PYG{l+m+mi}{101}
+\PYG{c+c1}{\PYGZsh{} Функция для запуска iperf между парой хостов}
+\PYG{k}{def} \PYG{n+nf}{run\PYGZus{}iperf}\PYG{p}{(}\PYG{n}{net}\PYG{p}{,} \PYG{n}{host1\PYGZus{}name}\PYG{p}{,} \PYG{n}{host2\PYGZus{}name}\PYG{p}{):}
+
+    \PYG{n}{h1} \PYG{o}{=} \PYG{n}{net}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{host1\PYGZus{}name}\PYG{p}{)}
+    \PYG{n}{h2} \PYG{o}{=} \PYG{n}{net}\PYG{o}{.}\PYG{n}{get}\PYG{p}{(}\PYG{n}{host2\PYGZus{}name}\PYG{p}{)}
+    \PYG{n}{h2}\PYG{o}{.}\PYG{n}{cmd}\PYG{p}{(}\PYG{l+s+s2}{\PYGZdq{}iperf3 \PYGZhy{}s \PYGZhy{}D\PYGZdq{}}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{}time.sleep(5)}
+    \PYG{n}{h1}\PYG{o}{.}\PYG{n}{cmd}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}mkdir \PYGZhy{}p output/}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host1\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZus{}to\PYGZus{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host2\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{h1}\PYG{o}{.}\PYG{n}{cmd}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}iperf3 \PYGZhy{}c }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{h2}\PYG{o}{.}\PYG{n}{IP}\PYG{p}{()}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{ \PYGZhy{}w 40000 \PYGZhy{}t }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{iperf\PYGZus{}time}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{ \PYGZhy{}l 1000 \PYGZhy{}J \PYGZgt{} output/}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host1\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZus{}to\PYGZus{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host2\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{/}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host1\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZus{}to\PYGZus{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host2\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZus{}iperf3.json\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{h1}\PYG{o}{.}\PYG{n}{cmd}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s2}{\PYGZdq{}cd output/}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host1\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZus{}to\PYGZus{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host2\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{ \PYGZam{}\PYGZam{} plot\PYGZus{}iperf.sh }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host1\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZus{}to\PYGZus{}}\PYG{l+s+si}{\PYGZob{}}\PYG{n}{host2\PYGZus{}name}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s2}{\PYGZus{}iperf3.json\PYGZdq{}}\PYG{p}{)}
+
+\PYG{c+c1}{\PYGZsh{} Функция для запуска мониторинга на линке с RED}
+\PYG{k}{def} \PYG{n+nf}{monitor\PYGZus{}queue}\PYG{p}{(}\PYG{n}{net}\PYG{p}{,} \PYG{n}{interface}\PYG{o}{=}\PYG{l+s+s2}{\PYGZdq{}r0\PYGZhy{}eth2\PYGZdq{}}\PYG{p}{,} \PYG{n}{interval}\PYG{o}{=}\PYG{l+m+mf}{0.025}\PYG{p}{,} \PYG{n}{output\PYGZus{}file}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}queue\PYGZus{}monitor.txt\PYGZsq{}}\PYG{p}{):}
+    \PYG{n}{t} \PYG{o}{=} \PYG{n}{threading}\PYG{o}{.}\PYG{n}{current\PYGZus{}thread}\PYG{p}{()}
+    \PYG{k}{with} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{output\PYGZus{}file}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}w\PYGZsq{}}\PYG{p}{)} \PYG{k}{as} \PYG{n}{file}\PYG{p}{:}
+        \PYG{k}{while} \PYG{n+nb}{getattr}\PYG{p}{(}\PYG{n}{t}\PYG{p}{,} \PYG{l+s+s2}{\PYGZdq{}do\PYGZus{}run\PYGZdq{}}\PYG{p}{,} \PYG{k+kc}{True}\PYG{p}{):}
+            \PYG{n}{result} \PYG{o}{=} \PYG{n}{net}\PYG{p}{[}\PYG{l+s+s1}{\PYGZsq{}r0\PYGZsq{}}\PYG{p}{]}\PYG{o}{.}\PYG{n}{cmd}\PYG{p}{(}\PYG{l+s+sa}{f}\PYG{l+s+s1}{\PYGZsq{}tc \PYGZhy{}s qdisc show dev }\PYG{l+s+si}{\PYGZob{}}\PYG{n}{interface}\PYG{l+s+si}{\PYGZcb{}}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+            \PYG{n+nb}{print}\PYG{p}{(}\PYG{n}{result}\PYG{p}{,} \PYG{n}{file}\PYG{o}{=}\PYG{n}{file}\PYG{p}{)}
+            \PYG{c+c1}{\PYGZsh{}time.sleep(interval)}
+
+\end{Verbatim}

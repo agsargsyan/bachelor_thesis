@@ -1,19 +1,70 @@
 %% Приложение
+\chapter{Натурная модель}
 
 В данном приложении представлен исходный код программы
 для решения стохастических дифференциальных уравнений,
 написанный на языке C с использоваеним библиотеки GSL.
 
-%\chapter{Натурная модель}
-\label{app3:1}
+\section*{topology.py}
+\begin{minted}[linenos,tabsize=2,breaklines]{python}
+from mininet.topo import Topo
+from router import LinuxRouter
 
-%\lstinputlisting{lst/diffur.h}
+# создание топологии для сети
+class NetworkTopo(Topo):
+    def build(self, num_hosts_subnets, **_opts):
+        # создание маршрутизаторы
+        r0 = self.addHost('r0', cls=LinuxRouter, ip='10.0.0.1/24')
+        r1 = self.addHost('r1', cls=LinuxRouter, ip='10.1.0.1/24')
 
-%\chapter{Файл diffur.c}
-%\label{app3:2}
+        # добавление коммутаторов для связи хостов
+        s1 = self.addSwitch('s1')
+        s2 = self.addSwitch('s2')
 
-%\lstinputlisting{lst/diffur.c}
+        # соединение между маршрутизаторами и коммутаторами
+        self.addLink(s1, r0, intfName2='r0-eth1', params2={'ip': '10.0.0.1/24'}, max_queue_size=300)
+        self.addLink(s2, r1, intfName2='r1-eth1', params2={'ip': '10.1.0.1/24'}, max_queue_size=300)
 
+        # соединение между маршрутизаторами
+        self.addLink(r0, r1, intfName1='r0-eth2', intfName2='r1-eth2', max_queue_size=30000, params1={'ip': '10.100.0.1/24', 'bw': '20'}, params2={'ip': '10.100.0.2/24', 'bw': '15'})
+
+        # добавление оконечных устройств
+        for i in range(1, 2*num_hosts_subnets + 1):
+            host_ip = '10.0.0.{}/24' if i % 2 == 1 else '10.1.0.{}/24'
+            default_route = 'via 10.0.0.1' if i % 2 == 1 else 'via 10.1.0.1'
+            host = self.addHost(name='h{}'.format(i), ip=host_ip.format(250 - i), defaultRoute=default_route)
+            switch = s1 if i % 2 == 1 else s2
+            self.addLink(host, switch, bw='100m')
+\end{minted}
+
+\section*{utils.py}
+\begin{minted}[linenos,tabsize=2,breaklines]{python}
+from threading import Thread
+import threading
+import time
+
+iperf_time = 101
+# Функция для запуска iperf между парой хостов
+def run_iperf(net, host1_name, host2_name):
+    
+    h1 = net.get(host1_name)
+    h2 = net.get(host2_name)
+    h2.cmd("iperf3 -s -D")
+    #time.sleep(5)
+    h1.cmd(f"mkdir -p output/{host1_name}_to_{host2_name}")
+    h1.cmd(f'iperf3 -c {h2.IP()} -w 40000 -t {iperf_time} -l 1000 -J > output/{host1_name}_to_{host2_name}/{host1_name}_to_{host2_name}_iperf3.json')
+    h1.cmd(f"cd output/{host1_name}_to_{host2_name} && plot_iperf.sh {host1_name}_to_{host2_name}_iperf3.json")
+    
+# Функция для запуска мониторинга на линке с RED
+def monitor_queue(net, interface="r0-eth2", interval=0.025, output_file='queue_monitor.txt'):
+    t = threading.current_thread()
+    with open(output_file, 'w') as file:
+        while getattr(t, "do_run", True):
+            result = net['r0'].cmd(f'tc -s qdisc show dev {interface}')
+            print(result, file=file)
+            #time.sleep(interval)
+
+\end{minted}
 %%% Local Variables:
 %%% mode: latex
 %%% coding: utf-8-unix
